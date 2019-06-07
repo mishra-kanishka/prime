@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 class AppRunner {
@@ -8,18 +7,24 @@ class AppRunner {
 
     public static void main(String[] args) {
         logger.info("Starting the application...");
-        logger.log(Level.INFO,"Enter \" quit \" to stop...");
+        logger.info("Enter \" quit \" to stop...");
+        logger.info("Starting the app with optional program" +
+                " argument to write result to file. i.e --file=myFile.txt");
 
         OutputChannel channel = new OutputChannel(args);
-        Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNext()) {
-            String value = scanner.next();
-            if (value.equalsIgnoreCase("quit")) break;
-            PrimeNumber primeNumber = new PrimeNumber(value);
-            channel.setMessage(primeNumber.getResult());
-            channel.spitOut();
+
+        try (Scanner scanner = new Scanner(System.in)) {
+            while (scanner.hasNext()) {
+                String value = scanner.next();
+                if (value.equalsIgnoreCase("quit")) {
+                    break;
+                }
+                PrimeNumber primeNumber = new PrimeNumber(value);
+                channel.setMessage(primeNumber.getResult());
+                channel.writeToOutput();
+            }
         }
-        scanner.close();
+
         logger.info("Stopping...");
     }
 

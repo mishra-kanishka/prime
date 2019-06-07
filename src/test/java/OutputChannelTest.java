@@ -1,4 +1,5 @@
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -15,28 +16,25 @@ public class OutputChannelTest {
     private PrimeNumber primeNumber;
     private Stream<String> stream;
     private static final String TEST_FILE_PATH = "./src/test/resources/test.txt";
+    private File testFile = new File(TEST_FILE_PATH);
 
-    private void readFile() {
-        try {
-            stream = Files.lines(Paths.get(OutputChannelTest.TEST_FILE_PATH));
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+    @Before
+    public void setup() throws IOException {
+        testFile.createNewFile();
     }
 
     @After
     public void removeTestFile() {
-        File testFile = new File(TEST_FILE_PATH);
         testFile.deleteOnExit();
     }
 
     @Test (expected = RuntimeException.class)
-    public void testFileNotFoundException() {
+    public void testHandleFileNotFoundException() {
         String[] myArgs = {"--file=/text.txt"};
         outputChannel = new OutputChannel(myArgs);
         primeNumber = new PrimeNumber("17");
         outputChannel.setMessage(primeNumber.getResult());
-        outputChannel.spitOut();
+        outputChannel.writeToOutput();
     }
 
     @Test
@@ -45,9 +43,17 @@ public class OutputChannelTest {
         outputChannel = new OutputChannel(myArgs);
         primeNumber = new PrimeNumber("23");
         outputChannel.setMessage(primeNumber.getResult());
-        outputChannel.spitOut();
+        outputChannel.writeToOutput();
         readFile();
         assertTrue(stream.anyMatch(line -> line.contains("23 is prime")));
+    }
+
+    private void readFile() {
+        try {
+            stream = Files.lines(Paths.get(OutputChannelTest.TEST_FILE_PATH));
+        } catch (IOException e) {
+            throw new RuntimeException("Issue with reading test file " + e.getMessage());
+        }
     }
 
 }

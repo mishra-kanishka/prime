@@ -17,14 +17,11 @@ class OutputChannel {
         this.message = message;
     }
 
-    void spitOut() {
+    protected void writeToOutput() {
         String absolutePath = findAbsolutePath(args);
         if (absolutePath != null) {
-            try {
-                File file = new File(absolutePath);
-                PrintWriter printWriter = new PrintWriter(new FileWriter(file, true));
+            try (PrintWriter printWriter = new PrintWriter(new FileWriter(new File(absolutePath), true))) {
                 printWriter.println(message);
-                printWriter.close();
             } catch (IOException e) {
                 throw new RuntimeException("error writing to file" + e);
             }
@@ -37,7 +34,7 @@ class OutputChannel {
         return Arrays.stream(args)
                 .filter(arg -> arg.contains("--file") || arg.contains("--f"))
                 .findFirst()
-                .map(arg -> arg.substring(arg.indexOf("=") + 1))
+                .map(arg -> arg.substring(arg.indexOf("=") + 1).trim())
                 .orElse(null);
     }
 }
