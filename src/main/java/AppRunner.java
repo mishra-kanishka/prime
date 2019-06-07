@@ -8,8 +8,8 @@ class AppRunner {
     public static void main(String[] args) {
         logger.info("Starting the application...");
         logger.info("Enter \" quit \" to stop...");
-        logger.info("Starting the app with optional program" +
-                " argument to write result to file. i.e --file=myFile.txt");
+        logger.info("Use program argument(--f or --file) to" +
+                " write result to file. i.e --file=myFile.txt");
 
         OutputChannel channel = new OutputChannel(args);
 
@@ -19,8 +19,8 @@ class AppRunner {
                 if (value.equalsIgnoreCase("quit")) {
                     break;
                 }
-                PrimeNumber primeNumber = new PrimeNumber(value);
-                channel.setMessage(primeNumber.getResult());
+                PrimeNumberService service = new PrimeNumberService(value);
+                channel.setMessage(service.getResult());
                 channel.writeToOutput();
             }
         }

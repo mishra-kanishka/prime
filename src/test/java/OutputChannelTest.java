@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 public class OutputChannelTest {
 
     private OutputChannel outputChannel;
-    private PrimeNumber primeNumber;
+    private PrimeNumberService primeNumberService;
     private Stream<String> stream;
     private static final String TEST_FILE_PATH = "./src/test/resources/test.txt";
     private File testFile = new File(TEST_FILE_PATH);
@@ -32,8 +32,8 @@ public class OutputChannelTest {
     public void testHandleFileNotFoundException() {
         String[] myArgs = {"--file=/text.txt"};
         outputChannel = new OutputChannel(myArgs);
-        primeNumber = new PrimeNumber("17");
-        outputChannel.setMessage(primeNumber.getResult());
+        primeNumberService = new PrimeNumberService("17");
+        outputChannel.setMessage(primeNumberService.getResult());
         outputChannel.writeToOutput();
     }
 
@@ -41,8 +41,8 @@ public class OutputChannelTest {
     public void testOutputToFile() {
         String[] myArgs = {"--f=" + TEST_FILE_PATH};
         outputChannel = new OutputChannel(myArgs);
-        primeNumber = new PrimeNumber("23");
-        outputChannel.setMessage(primeNumber.getResult());
+        primeNumberService = new PrimeNumberService("23");
+        outputChannel.setMessage(primeNumberService.getResult());
         outputChannel.writeToOutput();
         readFile();
         assertTrue(stream.anyMatch(line -> line.contains("23 is prime")));
