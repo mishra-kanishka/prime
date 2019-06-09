@@ -20,7 +20,7 @@ class PrimeNumberService {
         try {
             number = new Number(Integer.parseInt(input));
         } catch (NumberFormatException e) {
-            result = "Please enter valid integer.";
+            result = String.format("%s Is not a valid integer.", input);
             return;
         }
         if (number.getNumber() <= 1) {

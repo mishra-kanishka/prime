@@ -34,21 +34,21 @@ public class NumberTest {
     public void testString() {
         service = new PrimeNumberService("ABC");
         assertNotNull(service.getResult());
-        assertEquals("Please enter valid integer.", service.getResult());
+        assertEquals("ABC Is not a valid integer.", service.getResult());
     }
 
     @Test
     public  void testLongRangeNumber() {
         service = new PrimeNumberService("687654654643689");
         assertNotNull(service.getResult());
-        assertEquals("Please enter valid integer.", service.getResult());
+        assertEquals("687654654643689 Is not a valid integer.", service.getResult());
     }
 
     @Test
     public void testDecimalNumber() {
         service = new PrimeNumberService("2763.71");
         assertNotNull(service.getResult());
-        assertEquals("Please enter valid integer.", service.getResult());
+        assertEquals("2763.71 Is not a valid integer.", service.getResult());
     }
 
 }
